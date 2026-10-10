@@ -1,48 +1,40 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { PagesService } from './pages.service';
-import { JwtAuthGuard } from 'src/common/auth/guards/jwt-auth.guard';
-import { Permission } from 'src/common/auth/decorators/permisions.decorator';
-import { PermissionGuard } from 'src/common/auth/guards/permission.guard';
+import { JwtAuthGuard } from 'src/common/authentication/guards/jwt-auth.guard';
 
-import type { RequestWithUser } from 'src/common/auth/dto/request-with-user.type';
-import { RegisterPagesDto } from './dto/list-page-register.schema';
-import { UsersAssignSchema } from './work-space/dto/list-users-assign.schema';
-// import { PageIdAssignSchena } from './work-space/dto/page-id-assign.schema';
+import type { RequestWithUser } from 'src/common/authentication/dto/request-with-user.type';
+import { RegisterPagesDto } from './dtos/schemas/register-pages.schema';
+import { GetPageSchema } from './dtos/schemas/get-pages.schema';
+import { Permission } from 'src/common/authorization/decorators/permissions.decorator';
 
 @Controller('pages')
 export class PagesController {
   constructor(private readonly pageService: PagesService) {}
 
-  @Get('all-pages')
+  @Post('all-pages')
   @ApiBearerAuth('JWT')
-  @Permission('admin')
-  @UseGuards(JwtAuthGuard, PermissionGuard)
-  async getPages(@Req() req: RequestWithUser) {
-    return await this.pageService.getAllPagesUser(req.user.sub);
+  @Permission({ permission: 'ADMIN' })
+  @UseGuards(JwtAuthGuard)
+  async getPages(@Req() req: RequestWithUser, @Body() body: GetPageSchema) {
+    return await this.pageService.getAllPagesUser(
+      Number(req.user.id),
+      body.accountIds,
+    );
   }
 
   @Post('page/register')
   @ApiBearerAuth('JWT')
-  @Permission('admin')
+  @Permission({ permission: 'ADMIN' })
   @UseGuards(JwtAuthGuard)
   async registerPage(
     @Req() req: RequestWithUser,
     @Body() body: RegisterPagesDto,
   ) {
     const pagesSuccess = await this.pageService.registerPages(
-      req.user.sub,
-      body.pageIds,
+      Number(req.user.id),
+      body.request,
     );
 
     if (!pagesSuccess || pagesSuccess.length <= 0) {
@@ -55,17 +47,5 @@ export class PagesController {
       message: 'Page registered successfully',
       pages: [...pagesSuccess],
     };
-  }
-
-  @Post('page/:id/assign')
-  @ApiBearerAuth('JWT')
-  @Permission('admin')
-  @UseGuards(JwtAuthGuard)
-  pageAssign(
-    @Param('id', ParseIntPipe) pageId: number,
-    @Body() userSchemas: UsersAssignSchema,
-  ) {
-    //verify user request có quyền handler pageId
-    return this.pageService.createWorkSpace(pageId, userSchemas.userIds);
   }
 }

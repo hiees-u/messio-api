@@ -6,13 +6,14 @@ import { PagesService } from './pages.service';
 import { FacebookModule } from 'src/providers/facebook/facebook.module';
 import { CryptoModule } from 'src/infrastructure/crypto/crypto.module';
 
-import { UserAccessTokenRepository } from './repositories/userAccessToken.repository';
-import { UsePageRepository } from './repositories/usePage.repository';
+import { UserAccessTokenRepository } from './repositories/access-token.repository';
+import { UsePageRepository } from './repositories/page.repository';
 import { SettingModule } from './setting/setting.module';
 import { PageMapper } from './pages.mapper';
-// import { PermissionGuard } from 'src/common/auth/guards/permission.guard';
 import { UsersModule } from '../users/users.module';
-import { WorkSpaceModule } from './work-space/work-space.module';
+import { AuthorizationModule } from 'src/common/authorization/authorization.module';
+import { UseFacebookAccountRepository } from './repositories/facebook-account.repository';
+import { WorkSpacesModule } from '../workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -20,14 +21,15 @@ import { WorkSpaceModule } from './work-space/work-space.module';
     CryptoModule,
     SettingModule,
     UsersModule,
-    WorkSpaceModule,
+    WorkSpacesModule,
+    AuthorizationModule,
   ],
   providers: [
     UserAccessTokenRepository,
     PagesService,
     UsePageRepository,
-    // PermissionGuard,
     PageMapper,
+    UseFacebookAccountRepository,
   ],
   controllers: [PagesController],
   exports: [UsePageRepository, PagesService],

@@ -9,11 +9,13 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from 'src/common/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/common/authentication/guards/jwt-auth.guard';
 import { ChatsService } from './chats.service';
 
-import type { RequestWithUser } from 'src/common/auth/dto/request-with-user.type';
+import type { RequestWithUser } from 'src/common/authentication/dto/request-with-user.type';
 import { AlertEmailProducer } from 'src/infrastructure/queues/alert-email/alert-email.producer';
+import { PermissionGuard } from 'src/common/authorization/guards/permission.guard';
+import { Permission } from 'src/common/authorization/decorators/permissions.decorator';
 
 @Controller('chats')
 export class ChatsController {
@@ -24,7 +26,8 @@ export class ChatsController {
 
   @Post('sended/:id')
   @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
+  @Permission({ permission: 'SEEN', field: 'params.id' })
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   async sendMessage(
     @Req() req: RequestWithUser,
     @Param('id', ParseIntPipe) messages: number,

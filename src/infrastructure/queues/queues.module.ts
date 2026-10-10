@@ -2,7 +2,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { AlertEmailProducer } from './alert-email/alert-email.producer';
 import { AlertEmailProcessor } from './alert-email/alert-email.processor';
-import { ALERT_EMAIL_QUEUE } from './alert-email/alert-email.constaints';
+import { ALERT_EMAIL_QUEUE } from './alert-email/alert-email.constants';
 
 @Module({
   imports: [

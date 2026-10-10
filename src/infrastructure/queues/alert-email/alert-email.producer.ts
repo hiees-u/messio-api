@@ -6,7 +6,7 @@ import {
   ALERT_EMAIL_QUEUE,
   alertEmailJob,
   alertEmailJobIdPrefix,
-} from './alert-email.constaints';
+} from './alert-email.constants';
 
 @Injectable()
 export class AlertEmailProducer {

@@ -1,7 +1,7 @@
 import { Job } from 'bullmq';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 
-import { ALERT_EMAIL_QUEUE, alertEmailJob } from './alert-email.constaints';
+import { ALERT_EMAIL_QUEUE, alertEmailJob } from './alert-email.constants';
 
 @Processor(ALERT_EMAIL_QUEUE)
 export class AlertEmailProcessor extends WorkerHost {

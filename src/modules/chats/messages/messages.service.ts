@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
-import UseMessagesRepository from './repositories/useMessages.repository';
-import { CreateMessageRequestDto } from './dto/create-message.request.dto';
+import UseMessagesRepository from './repositories/messages.repository';
+import { CreateMessageInput } from './types/create-message.input';
 
 @Injectable()
 export class MessagesService {
   constructor(private readonly useMessagesRepository: UseMessagesRepository) {}
 
-  async createMessage(message: CreateMessageRequestDto, roomId: number) {
+  async createMessage(message: CreateMessageInput, roomId: number) {
     return await this.useMessagesRepository.createMessage(message, roomId);
   }
 }

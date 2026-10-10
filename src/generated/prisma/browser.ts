@@ -72,3 +72,8 @@ export type WorkSpace = Prisma.WorkSpaceModel
  * 
  */
 export type GoogleAuth = Prisma.GoogleAuthModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel

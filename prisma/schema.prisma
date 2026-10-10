@@ -52,7 +52,7 @@ model UserAccessToken {
   userFacebook      UserFacebook @relation(fields: [userFacebookId], references: [id], onDelete: Cascade)
 }
 
-model  FaceBookPage {
+model FaceBookPage {
   id        Int     @id @default(autoincrement())
   token     String  @unique
   name      String
@@ -119,6 +119,8 @@ model WorkSpace {
   page      FaceBookPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
   user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([pageId, userId])
+
+  permissions Permission[]
 }
 
 model GoogleAuth {
@@ -127,4 +129,13 @@ model GoogleAuth {
   avataUrl String
   userId   Int     @unique
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Permission {
+  id        Int     @id @default(autoincrement())
+  workSpaceId Int
+  permission String @default("read")
+  workSpace WorkSpace @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workSpaceId, permission])
 }
