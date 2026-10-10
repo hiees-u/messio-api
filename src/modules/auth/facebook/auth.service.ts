@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { AuthServiceCommon } from 'src/common/auth/auth.service';
+import { AuthServiceCommon } from 'src/common/authentication/auth.service';
 import { TokenEncryptionService } from 'src/infrastructure/crypto/token-encryption.service';
 import { FacebookUserApiGraph } from 'src/providers/facebook/services/facebook-user-api.service';
-import { UseUserRepository } from '../../users/repositories/useUser.repository';
-import CreateUserDto from '../../users/dto/createUserDto';
+
+import { UserService } from 'src/modules/users/user.service';
+
+import type { FacebookOauthAccessTokenResponse } from 'src/providers/facebook/dtos/facebook-oauth-access-token.graph.response';
+import type { User } from 'src/generated/prisma/browser';
+import type { UpsertFacebookUserInput } from 'src/modules/users/types/upsert-facebook-user.input';
 
 @Injectable()
 export class AuthService {
@@ -11,31 +15,25 @@ export class AuthService {
     private readonly authServiceCommon: AuthServiceCommon,
     private readonly facebookUserApiGraph: FacebookUserApiGraph,
     private readonly tokenEncryptionService: TokenEncryptionService,
-    private readonly UseUserRepository: UseUserRepository,
+    private readonly userService: UserService,
   ) {}
 
   async login(code: string): Promise<{ accessToken: string } | null> {
-    const accessToken =
+    const accessToken: FacebookOauthAccessTokenResponse =
       await this.facebookUserApiGraph.getUserAccessToken(code);
 
     const userInfo = await this.facebookUserApiGraph.getMe(
       accessToken.access_token,
-      'id,name,email,picture',
     );
 
-    let existingUser = null;
+    let existingUser: User | null = null;
 
     if (userInfo) {
       const encryptedToken = this.tokenEncryptionService.encrypt(
         accessToken.access_token,
       );
 
-      const user: CreateUserDto = {
-        name: userInfo.name,
-        email: userInfo.email || '',
-      };
-
-      const userFacebook = {
+      const userFacebook: UpsertFacebookUserInput = {
         facebookId: userInfo.id,
         name: userInfo.name,
         email: userInfo.email || '',
@@ -49,11 +47,10 @@ export class AuthService {
         isSilhouette: userInfo.picture.data.is_silhouette,
       };
 
-      existingUser = await this.UseUserRepository.upsertUserWithFacebook(
-        user,
-        userFacebook,
-      );
+      existingUser = await this.userService.upsertFacebookUser(userFacebook);
     }
+
+    //add permission user:admin to redis
 
     return {
       accessToken: await this.authServiceCommon.generateToken({

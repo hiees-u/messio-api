@@ -8,9 +8,9 @@ import { WebsocketService } from 'src/infrastructure/websocket/websocket.service
 import { AlertEmailProducer } from 'src/infrastructure/queues/alert-email/alert-email.producer';
 
 import { FindOrCreateResult } from 'src/common/types/find-or-create-result.type';
-import { CustomerDto } from './customer/dto/customer.dto';
-import { CreateMessageRequestDto } from './messages/dto/create-message.request.dto';
-import UseMessagesRepository from './messages/repositories/useMessages.repository';
+import { CreateMessageInput } from './messages/types/create-message.input';
+import UseMessagesRepository from './messages/repositories/messages.repository';
+import { Customers, Rooms } from 'src/generated/prisma/client';
 
 @Injectable()
 export class ChatsService {
@@ -27,7 +27,7 @@ export class ChatsService {
   async handlerReceiveMessage(
     psidCusomer: string,
     pageId: string,
-    message: CreateMessageRequestDto,
+    message: CreateMessageInput,
   ) {
     const pageRecipient = await this.pagesService.getPageDb(pageId);
 
@@ -35,7 +35,7 @@ export class ChatsService {
       return '';
     }
 
-    const customerFindOrCreateResult: FindOrCreateResult<CustomerDto | null> =
+    const customerFindOrCreateResult: FindOrCreateResult<Customers | null> =
       await this.customerService.findOrCreatePageCustomer(
         psidCusomer,
         pageRecipient?.token || null,
@@ -45,7 +45,7 @@ export class ChatsService {
       return '';
     }
 
-    const room = customerFindOrCreateResult.created
+    const room: Rooms | null = customerFindOrCreateResult.created
       ? await this.roomsService.createRoomDb(
           pageRecipient?.id,
           customerFindOrCreateResult.data?.id,

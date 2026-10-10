@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { GoogleService } from './google.service';
 import { GoogleController } from './google.controller';
-import { AuthModuleCommon } from 'src/common/auth/auth.module';
+import { AuthModuleCommon } from 'src/common/authentication/auth.module';
 import { UsersModule } from 'src/modules/users/users.module';
 
 @Module({

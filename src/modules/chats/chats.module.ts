@@ -9,6 +9,7 @@ import { CustomerModule } from './customer/customer.module';
 import { MessagesModule } from './messages/messages.module';
 import { WebsocketModule } from 'src/infrastructure/websocket/websocket.module';
 import { QueuesModule } from 'src/infrastructure/queues/queues.module';
+import { AuthorizationModule } from 'src/common/authorization/authorization.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { QueuesModule } from 'src/infrastructure/queues/queues.module';
     MessagesModule,
     WebsocketModule,
     QueuesModule,
+    AuthorizationModule,
   ],
   exports: [ChatsService],
   controllers: [ChatsController],

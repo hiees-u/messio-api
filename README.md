@@ -132,3 +132,14 @@ npx prisma generate
 
 04-06-2026: login user with email and passwork and add user in workspace -> page
 check permission of user in workspace -> page -> send/seend message in page
+
+=_= 
+
+create table roles(user id, role_key), role_key .hard cứng! khi login thì tạo table roles
+
+- khi login thì add permission của user vào redis
+- khi change role của user thì update redis -> await
+- thực hiện logic xác định field nhận pageid ở gual -> await
+- đưa handler messages từ meta vào bullMQ -email-> report -> export
+
+27-09: edit lại all data type -> restructuring

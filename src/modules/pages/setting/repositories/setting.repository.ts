@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
-import { CreateSettingRequestDto } from '../dto/create-setting.request';
+
+import type { CreateSettingInput } from '../types/create-setting.input';
 
 @Injectable()
 export class SettingRepository {
   constructor(private prisma: PrismaService) {}
 
-  createSetting(setting: CreateSettingRequestDto) {
+  createSetting(setting: CreateSettingInput) {
     return this.prisma.pageSetting.create({
       data: {
         pageId: setting.pageId,

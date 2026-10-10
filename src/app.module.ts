@@ -12,7 +12,7 @@ import { CryptoModule } from './infrastructure/crypto/crypto.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
 
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { AuthModuleCommon } from './common/auth/auth.module';
+import { AuthModuleCommon } from './common/authentication/auth.module';
 
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { ChatsModule } from './modules/chats/chats.module';
@@ -23,6 +23,7 @@ import { PagesModule } from './modules/pages/pages.module';
 import { WebsocketModule } from './infrastructure/websocket/websocket.module';
 import { QueuesModule } from './infrastructure/queues/queues.module';
 import { GoogleModule } from './modules/auth/google/google.module';
+import { WorkSpacesModule } from './modules/workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { GoogleModule } from './modules/auth/google/google.module';
     WebsocketModule,
     QueuesModule,
     GoogleModule,
+    WorkSpacesModule,
   ],
   controllers: [],
   providers: [],

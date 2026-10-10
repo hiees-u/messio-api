@@ -2,9 +2,9 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 
 import { GoogleService } from './google.service';
 
-import type { ReuqestWithUserGoogle } from 'src/common/auth/dto/request-with-user-google.type';
+import type { ReuqestWithUserGoogle } from 'src/common/authentication/dto/request-with-user-google.type';
 import type { Response } from 'express';
-import { GoogleAuthGuard } from 'src/common/auth/guards/google-auth.guard';
+import { GoogleAuthGuard } from 'src/common/authentication/guards/google-auth.guard';
 
 @Controller('auth')
 export class GoogleController {

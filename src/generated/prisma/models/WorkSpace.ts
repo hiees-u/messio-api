@@ -226,6 +226,7 @@ export type WorkSpaceWhereInput = {
   modifiedAt?: Prisma.DateTimeFilter<"WorkSpace"> | Date | string
   page?: Prisma.XOR<Prisma.FaceBookPageScalarRelationFilter, Prisma.FaceBookPageWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  permissions?: Prisma.PermissionListRelationFilter
 }
 
 export type WorkSpaceOrderByWithRelationInput = {
@@ -236,6 +237,7 @@ export type WorkSpaceOrderByWithRelationInput = {
   modifiedAt?: Prisma.SortOrder
   page?: Prisma.FaceBookPageOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  permissions?: Prisma.PermissionOrderByRelationAggregateInput
 }
 
 export type WorkSpaceWhereUniqueInput = Prisma.AtLeast<{
@@ -250,6 +252,7 @@ export type WorkSpaceWhereUniqueInput = Prisma.AtLeast<{
   modifiedAt?: Prisma.DateTimeFilter<"WorkSpace"> | Date | string
   page?: Prisma.XOR<Prisma.FaceBookPageScalarRelationFilter, Prisma.FaceBookPageWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  permissions?: Prisma.PermissionListRelationFilter
 }, "id" | "pageId_userId">
 
 export type WorkSpaceOrderByWithAggregationInput = {
@@ -281,6 +284,7 @@ export type WorkSpaceCreateInput = {
   modifiedAt?: Date | string
   page: Prisma.FaceBookPageCreateNestedOneWithoutWorkSpacesInput
   user: Prisma.UserCreateNestedOneWithoutWorkSpacesInput
+  permissions?: Prisma.PermissionCreateNestedManyWithoutWorkSpaceInput
 }
 
 export type WorkSpaceUncheckedCreateInput = {
@@ -289,6 +293,7 @@ export type WorkSpaceUncheckedCreateInput = {
   userId: number
   createdAt?: Date | string
   modifiedAt?: Date | string
+  permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutWorkSpaceInput
 }
 
 export type WorkSpaceUpdateInput = {
@@ -296,6 +301,7 @@ export type WorkSpaceUpdateInput = {
   modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   page?: Prisma.FaceBookPageUpdateOneRequiredWithoutWorkSpacesNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutWorkSpacesNestedInput
+  permissions?: Prisma.PermissionUpdateManyWithoutWorkSpaceNestedInput
 }
 
 export type WorkSpaceUncheckedUpdateInput = {
@@ -304,6 +310,7 @@ export type WorkSpaceUncheckedUpdateInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  permissions?: Prisma.PermissionUncheckedUpdateManyWithoutWorkSpaceNestedInput
 }
 
 export type WorkSpaceCreateManyInput = {
@@ -376,6 +383,11 @@ export type WorkSpaceSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+}
+
+export type WorkSpaceScalarRelationFilter = {
+  is?: Prisma.WorkSpaceWhereInput
+  isNot?: Prisma.WorkSpaceWhereInput
 }
 
 export type WorkSpaceCreateNestedManyWithoutUserInput = {
@@ -462,10 +474,25 @@ export type WorkSpaceUncheckedUpdateManyWithoutPageNestedInput = {
   deleteMany?: Prisma.WorkSpaceScalarWhereInput | Prisma.WorkSpaceScalarWhereInput[]
 }
 
+export type WorkSpaceCreateNestedOneWithoutPermissionsInput = {
+  create?: Prisma.XOR<Prisma.WorkSpaceCreateWithoutPermissionsInput, Prisma.WorkSpaceUncheckedCreateWithoutPermissionsInput>
+  connectOrCreate?: Prisma.WorkSpaceCreateOrConnectWithoutPermissionsInput
+  connect?: Prisma.WorkSpaceWhereUniqueInput
+}
+
+export type WorkSpaceUpdateOneRequiredWithoutPermissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkSpaceCreateWithoutPermissionsInput, Prisma.WorkSpaceUncheckedCreateWithoutPermissionsInput>
+  connectOrCreate?: Prisma.WorkSpaceCreateOrConnectWithoutPermissionsInput
+  upsert?: Prisma.WorkSpaceUpsertWithoutPermissionsInput
+  connect?: Prisma.WorkSpaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkSpaceUpdateToOneWithWhereWithoutPermissionsInput, Prisma.WorkSpaceUpdateWithoutPermissionsInput>, Prisma.WorkSpaceUncheckedUpdateWithoutPermissionsInput>
+}
+
 export type WorkSpaceCreateWithoutUserInput = {
   createdAt?: Date | string
   modifiedAt?: Date | string
   page: Prisma.FaceBookPageCreateNestedOneWithoutWorkSpacesInput
+  permissions?: Prisma.PermissionCreateNestedManyWithoutWorkSpaceInput
 }
 
 export type WorkSpaceUncheckedCreateWithoutUserInput = {
@@ -473,6 +500,7 @@ export type WorkSpaceUncheckedCreateWithoutUserInput = {
   pageId: number
   createdAt?: Date | string
   modifiedAt?: Date | string
+  permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutWorkSpaceInput
 }
 
 export type WorkSpaceCreateOrConnectWithoutUserInput = {
@@ -516,6 +544,7 @@ export type WorkSpaceCreateWithoutPageInput = {
   createdAt?: Date | string
   modifiedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWorkSpacesInput
+  permissions?: Prisma.PermissionCreateNestedManyWithoutWorkSpaceInput
 }
 
 export type WorkSpaceUncheckedCreateWithoutPageInput = {
@@ -523,6 +552,7 @@ export type WorkSpaceUncheckedCreateWithoutPageInput = {
   userId: number
   createdAt?: Date | string
   modifiedAt?: Date | string
+  permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutWorkSpaceInput
 }
 
 export type WorkSpaceCreateOrConnectWithoutPageInput = {
@@ -551,6 +581,52 @@ export type WorkSpaceUpdateManyWithWhereWithoutPageInput = {
   data: Prisma.XOR<Prisma.WorkSpaceUpdateManyMutationInput, Prisma.WorkSpaceUncheckedUpdateManyWithoutPageInput>
 }
 
+export type WorkSpaceCreateWithoutPermissionsInput = {
+  createdAt?: Date | string
+  modifiedAt?: Date | string
+  page: Prisma.FaceBookPageCreateNestedOneWithoutWorkSpacesInput
+  user: Prisma.UserCreateNestedOneWithoutWorkSpacesInput
+}
+
+export type WorkSpaceUncheckedCreateWithoutPermissionsInput = {
+  id?: number
+  pageId: number
+  userId: number
+  createdAt?: Date | string
+  modifiedAt?: Date | string
+}
+
+export type WorkSpaceCreateOrConnectWithoutPermissionsInput = {
+  where: Prisma.WorkSpaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkSpaceCreateWithoutPermissionsInput, Prisma.WorkSpaceUncheckedCreateWithoutPermissionsInput>
+}
+
+export type WorkSpaceUpsertWithoutPermissionsInput = {
+  update: Prisma.XOR<Prisma.WorkSpaceUpdateWithoutPermissionsInput, Prisma.WorkSpaceUncheckedUpdateWithoutPermissionsInput>
+  create: Prisma.XOR<Prisma.WorkSpaceCreateWithoutPermissionsInput, Prisma.WorkSpaceUncheckedCreateWithoutPermissionsInput>
+  where?: Prisma.WorkSpaceWhereInput
+}
+
+export type WorkSpaceUpdateToOneWithWhereWithoutPermissionsInput = {
+  where?: Prisma.WorkSpaceWhereInput
+  data: Prisma.XOR<Prisma.WorkSpaceUpdateWithoutPermissionsInput, Prisma.WorkSpaceUncheckedUpdateWithoutPermissionsInput>
+}
+
+export type WorkSpaceUpdateWithoutPermissionsInput = {
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  page?: Prisma.FaceBookPageUpdateOneRequiredWithoutWorkSpacesNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutWorkSpacesNestedInput
+}
+
+export type WorkSpaceUncheckedUpdateWithoutPermissionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type WorkSpaceCreateManyUserInput = {
   id?: number
   pageId: number
@@ -562,6 +638,7 @@ export type WorkSpaceUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   page?: Prisma.FaceBookPageUpdateOneRequiredWithoutWorkSpacesNestedInput
+  permissions?: Prisma.PermissionUpdateManyWithoutWorkSpaceNestedInput
 }
 
 export type WorkSpaceUncheckedUpdateWithoutUserInput = {
@@ -569,6 +646,7 @@ export type WorkSpaceUncheckedUpdateWithoutUserInput = {
   pageId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  permissions?: Prisma.PermissionUncheckedUpdateManyWithoutWorkSpaceNestedInput
 }
 
 export type WorkSpaceUncheckedUpdateManyWithoutUserInput = {
@@ -589,6 +667,7 @@ export type WorkSpaceUpdateWithoutPageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWorkSpacesNestedInput
+  permissions?: Prisma.PermissionUpdateManyWithoutWorkSpaceNestedInput
 }
 
 export type WorkSpaceUncheckedUpdateWithoutPageInput = {
@@ -596,6 +675,7 @@ export type WorkSpaceUncheckedUpdateWithoutPageInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modifiedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  permissions?: Prisma.PermissionUncheckedUpdateManyWithoutWorkSpaceNestedInput
 }
 
 export type WorkSpaceUncheckedUpdateManyWithoutPageInput = {
@@ -606,6 +686,35 @@ export type WorkSpaceUncheckedUpdateManyWithoutPageInput = {
 }
 
 
+/**
+ * Count Type WorkSpaceCountOutputType
+ */
+
+export type WorkSpaceCountOutputType = {
+  permissions: number
+}
+
+export type WorkSpaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  permissions?: boolean | WorkSpaceCountOutputTypeCountPermissionsArgs
+}
+
+/**
+ * WorkSpaceCountOutputType without action
+ */
+export type WorkSpaceCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkSpaceCountOutputType
+   */
+  select?: Prisma.WorkSpaceCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * WorkSpaceCountOutputType without action
+ */
+export type WorkSpaceCountOutputTypeCountPermissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PermissionWhereInput
+}
+
 
 export type WorkSpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -615,6 +724,8 @@ export type WorkSpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   modifiedAt?: boolean
   page?: boolean | Prisma.FaceBookPageDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  permissions?: boolean | Prisma.WorkSpace$permissionsArgs<ExtArgs>
+  _count?: boolean | Prisma.WorkSpaceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workSpace"]>
 
 export type WorkSpaceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -649,6 +760,8 @@ export type WorkSpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type WorkSpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.FaceBookPageDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  permissions?: boolean | Prisma.WorkSpace$permissionsArgs<ExtArgs>
+  _count?: boolean | Prisma.WorkSpaceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkSpaceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.FaceBookPageDefaultArgs<ExtArgs>
@@ -664,6 +777,7 @@ export type $WorkSpacePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     page: Prisma.$FaceBookPagePayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
+    permissions: Prisma.$PermissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1067,6 +1181,7 @@ export interface Prisma__WorkSpaceClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   page<T extends Prisma.FaceBookPageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FaceBookPageDefaultArgs<ExtArgs>>): Prisma.Prisma__FaceBookPageClient<runtime.Types.Result.GetResult<Prisma.$FaceBookPagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  permissions<T extends Prisma.WorkSpace$permissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkSpace$permissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1499,6 +1614,30 @@ export type WorkSpaceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many WorkSpaces to delete.
    */
   limit?: number
+}
+
+/**
+ * WorkSpace.permissions
+ */
+export type WorkSpace$permissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Permission
+   */
+  select?: Prisma.PermissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Permission
+   */
+  omit?: Prisma.PermissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PermissionInclude<ExtArgs> | null
+  where?: Prisma.PermissionWhereInput
+  orderBy?: Prisma.PermissionOrderByWithRelationInput | Prisma.PermissionOrderByWithRelationInput[]
+  cursor?: Prisma.PermissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PermissionScalarFieldEnum | Prisma.PermissionScalarFieldEnum[]
 }
 
 /**

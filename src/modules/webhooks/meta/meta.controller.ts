@@ -5,8 +5,8 @@ import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 
 import { WebsocketService } from 'src/infrastructure/websocket/websocket.service';
 
-import type { WebhooksMessageResponse } from './dto/webhooks.messages.response';
-import type { WebhookVerificationRequestDto } from './dto/webhook-verification.request.dto';
+import type { FacebookMessageWebhookResponse } from './dto/facebook-messages-webhooks.response.dto';
+import type { FacebookWebhookVerificationRequestDto } from './dto/facebook-webhook-verification.request.dto';
 
 @ApiTags('Webhooks')
 @Controller('webhooks/meta')
@@ -18,7 +18,7 @@ export class MetaController {
 
   @Get()
   getMetaWebhooks(
-    @Query() query: WebhookVerificationRequestDto,
+    @Query() query: FacebookWebhookVerificationRequestDto,
     @Res() res: Response,
   ) {
     const result = this.metaService.handlerVerificationApiWebhook(query);
@@ -27,11 +27,11 @@ export class MetaController {
   }
 
   @Post()
-  async postWebhooks(
-    @Body() body: WebhooksMessageResponse,
+  postWebhooks(
+    @Body() body: FacebookMessageWebhookResponse,
     @Res() res: Response,
   ) {
-    await this.metaService.handlerWebhookMessages(body);
+    this.metaService.handlerWebhookMessages(body);
     return res.sendStatus(200);
   }
 

@@ -2,21 +2,25 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { ChatsService } from 'src/modules/chats/chats.service';
 
-import { WebhookVerificationRequestDto } from './dto/webhook-verification.request.dto';
-import { WebhooksMessageResponse } from './dto/webhooks.messages.response';
-import { CreateMessageRequestDto } from 'src/modules/chats/messages/dto/create-message.request.dto';
+import { FacebookWebhookVerificationRequestDto } from './dto/facebook-webhook-verification.request.dto';
+import { FacebookMessageWebhookResponse } from './dto/facebook-messages-webhooks.response.dto';
+import { CreateMessageInput } from 'src/modules/chats/messages/types/create-message.input';
 
 @Injectable()
 export class MetaService {
-  constructor(private readonly chatsService: ChatsService) {}
+  private readonly verifyToken: string | null;
+  private readonly SUBSCRIBE_MODE = 'subscribe';
+  constructor(private readonly chatsService: ChatsService) {
+    this.verifyToken = process.env.FACEBOOK_WEBHOOK_VERIFY_TOKEN || null;
+  }
 
-  async handlerWebhookMessages(body: WebhooksMessageResponse) {
+  handlerWebhookMessages(body: FacebookMessageWebhookResponse) {
     console.log('Received webhook:', JSON.stringify(body));
     const psidCusomer = body.entry[0].messaging[0].sender.id;
     const pageId = body.entry[0].messaging[0].recipient.id;
     const messageType =
       body.entry[0].messaging[0].message.attachments?.[0]?.type ?? 'text';
-    const message: CreateMessageRequestDto = {
+    const message: CreateMessageInput = {
       mid: body.entry[0].messaging[0].message.mid,
       type: messageType,
       text:
@@ -25,20 +29,20 @@ export class MetaService {
           : body.entry[0].messaging[0].message.text || '',
     };
 
-    await this.chatsService.handlerReceiveMessage(psidCusomer, pageId, message);
+    /**
+     * upgade add in bullmq.
+     */
+    void this.chatsService.handlerReceiveMessage(psidCusomer, pageId, message);
   }
 
-  handlerVerificationApiWebhook(query: WebhookVerificationRequestDto) {
+  handlerVerificationApiWebhook(query: FacebookWebhookVerificationRequestDto) {
     const {
       'hub.mode': mode,
       'hub.verify_token': token,
       'hub.challenge': challenge,
     } = query;
 
-    if (
-      mode === 'subscribe' &&
-      token === process.env.FACEBOOK_WEBHOOK_VERIFY_TOKEN
-    ) {
+    if (mode === this.SUBSCRIBE_MODE && token === this.verifyToken) {
       return challenge;
     }
     throw new ForbiddenException();
