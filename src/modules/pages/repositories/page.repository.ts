@@ -91,7 +91,7 @@ export class UsePageRepository {
     }
   }
 
-  async getPagesDb(pageIds: string[]) {
+  async getPagesWithPageIds(pageIds: string[]) {
     return await this.prisma.faceBookPage.findMany({
       where: {
         pageId: {
@@ -100,6 +100,7 @@ export class UsePageRepository {
       },
       select: {
         id: true,
+        pageId: true,
       },
     });
   }

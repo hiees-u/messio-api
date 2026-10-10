@@ -10,6 +10,7 @@ interface FacebookPageGraphResponse {
   name: string;
   id: string;
   tasks: string[];
+  registered?: boolean;
 }
 
 interface FacebookPaging {

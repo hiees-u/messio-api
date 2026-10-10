@@ -14,7 +14,7 @@ export class PageMapper {
         token: page.access_token,
         name: page.name,
         tasks: page.tasks,
-        registered: false,
+        registered: page.registered || false,
       };
     });
   }

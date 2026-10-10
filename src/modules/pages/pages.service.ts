@@ -59,8 +59,23 @@ export class PagesService {
             await Promise.all(
               tokens.map(async (token) => {
                 try {
-                  const pages: FacebookPageGraphResponse[] =
+                  let pages: FacebookPageGraphResponse[] =
                     await this.facebookPageApiGraph.getPages(token.token);
+
+                  const existingPagesDb =
+                    await this.usePageRepository.getPagesWithPageIds(
+                      pages.map((p) => p.id),
+                    );
+
+                  pages = pages.map((page) => {
+                    const pageDb = existingPagesDb.find(
+                      (p) => p.pageId === page.id,
+                    );
+                    return {
+                      ...page,
+                      registered: pageDb ? true : false,
+                    };
+                  });
 
                   return {
                     [token.userFacebookId]:
