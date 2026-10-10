@@ -62,8 +62,8 @@ export class RedisPagesService {
     fAccountId: number,
     pId?: string,
   ): string {
-    if (!pId) return `FB-PAGE:${userId}:${fAccountId}-*`;
-    return `FB-PAGE:${userId}:${fAccountId}-${pId}`;
+    if (!pId) return `FB:PAGE:${userId}:${fAccountId}-*`;
+    return `META:PAGE:${userId}:${fAccountId}:${pId}`;
   }
 
   private async getKeys(key: string): Promise<string[]> {
