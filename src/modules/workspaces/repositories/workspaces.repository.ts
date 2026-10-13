@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PermissionCreateManyInput } from 'src/generated/prisma/internal/prismaNamespaceBrowser';
 import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
 import { CreatePermissionInput } from 'src/modules/auth/permissions/dto/create-permission.dto';
 
@@ -26,20 +27,30 @@ export class WorkSpaceRepository {
     );
   }
 
-  createWorkspaceForPages(
+  async createWorkspaceForPages(
     pageIds: number[],
     userPermission: CreatePermissionInput,
   ) {
-    return this.prisma.workSpace.createMany({
-      data: pageIds.map((padeId: number) => ({
-        pageId: padeId,
-        userId: userPermission.userId,
-        Permissions: {
-          create: {
-            permission: userPermission.permission,
-          },
-        },
-      })),
+    return await this.prisma.$transaction(async (tx) => {
+      const workspaces = await Promise.all(
+        pageIds.map((pageId) =>
+          tx.workSpace.create({
+            data: {
+              pageId,
+              userId: userPermission.userId,
+            },
+          }),
+        ),
+      );
+
+      await tx.permission.createMany({
+        data: workspaces.map((workspace) => ({
+          workSpaceId: workspace.id,
+          permission: userPermission.permission,
+        })) as PermissionCreateManyInput[],
+      });
+
+      return workspaces;
     });
   }
 }
